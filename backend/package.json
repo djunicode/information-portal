@@ -4,6 +4,11 @@
   "description": "Information portol project",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "db:create": "docker run -d -p 27017:27017 --name unicode mongo",
+    "db:start": "docker start unicode",
+    "db:bash": "docker exec -it unicode bash",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -16,7 +21,9 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.22",
     "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
