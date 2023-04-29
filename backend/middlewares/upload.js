@@ -6,10 +6,11 @@ const upload = multer({
         cb(null, file.originalname + "_" + Date.now);
     },
     fileFilter: (req, file, cb) => {
-        if (file.originalname.match(/\.(jpg|jpeg|png)/)) {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf', 'application/msword'];
+        if (allowedMimeTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error("Only .jpeg, .jpg, .png image format allowed"), false);
+            cb(new Error('Invalid file type.'));
         }
     }
 }).array("files");
