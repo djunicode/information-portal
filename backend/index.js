@@ -8,11 +8,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 
 const authRouter = require('./routes/auth');
+const committeeRouter = require('./routes/committeeRoutes');
 // Assigning Routes
 app.use('/api/auth', authRouter);
+app.use('/api/committee', committeeRouter);
 
 let port = process.env.PORT;
 if (port == null || port == "") {
