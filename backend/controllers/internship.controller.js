@@ -15,14 +15,19 @@ const addInternship = async(req,res)=>{
 //view internships
 const viewInternships =  async(req,res)=>{
     try {
-        const filter = req.params.filter;
-        if(filter=='all')
+        const {status,id} = req.query;
+        
+        if(id)
+        {
+            var internships = await Internship.find({_id:id});
+        }
+        else if(status=='all'|| !status)
         {
             var internships = await Internship.find({user_id:req.user._id});          
         }
         else
         {           
-            var internships = await Internship.find({user_id:req.user._id ,status:filter });
+            var internships = await Internship.find({user_id:req.user._id ,status:status });
         }
         if(!internships)
         {
@@ -38,24 +43,6 @@ const viewInternships =  async(req,res)=>{
     }
 }
 
-//view by id
-const viewInternships_id =  async(req,res)=>{
-    try {
-        const id = req.params.id;
-        const data = await Internship.find({_id:id});
-        if(!data)
-        {
-            res.status(501).json({message:"No internships found" , status:"failed"});
-        }
-        else
-        {            
-            res.status(201).send(data);
-        }
-
-    } catch (error) {
-        res.status(500).json({message:error.message , task_status:"failed"});
-    }
-}
 
 //update internships
 const updateInternship = async(req,res)=>{
@@ -86,4 +73,4 @@ const deleteInternship = async(req,res)=>{
     }
 }
 
-module.exports={addInternship ,viewInternships ,viewInternships_id, updateInternship, deleteInternship}
+module.exports={addInternship ,viewInternships , updateInternship, deleteInternship}
