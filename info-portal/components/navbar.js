@@ -18,7 +18,7 @@ const navbar = () => {
   }
 
   return (
-    <div className='font-ubuntu'>
+    <div className='font-ubuntu w-60'>
         <div className='sidebar bg-white fixed top-0 bottom-0 lg:left-0 sm:left-[-300px] p-2 w-[230px] overflow-y-auto text-center '>
         
           <div className='text-navgrey font-semibold text-lg '>
