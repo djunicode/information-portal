@@ -25,17 +25,11 @@ const Login = () => {
 
     return (
         <>
-
-
-
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={0}>
-
                     <Grid item xs={4} className='hidden tablet:inline'>
-
                         <Item>
                             <Image className='' src={background} alt='bg'></Image>
-
                         </Item>
                     </Grid>
 
