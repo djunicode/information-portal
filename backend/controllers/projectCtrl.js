@@ -1,19 +1,27 @@
 const Project = require('../models/project.model');
 
 const addProject = async (request, response) => {
-  const project = request.body;
-  const newProject = new Project(project);
-  try {
-    await newProject.save();
-    response
-    .status(201)
-    // .json({
-    //     message: 'Project created!'
-    // })
-    .json(newProject)
-  } catch (error) {
-    response.status(400).json({ message: error.message });
-  }
+  console.log("add project controller")
+    const image = request.file ? request.file.filename : null;
+    const {
+        title,
+        description,
+        skills,
+        githubURL,
+        hostedLink
+    } = request.body;
+    const newProject = new Project({ title, description, skills, githubURL, hostedLink, image });
+    try {
+        await newProject.save();
+        response
+            .status(201)
+            // .json({
+            //     message: 'Project created!'
+            // })
+            .json(newProject);
+    } catch (error) {
+        response.status(400).json({ message: error.message });
+    }
 };
 
 const getProjects = async (request, response) => {
@@ -46,6 +54,7 @@ const getProject = async (request, response) => {
 const updateProject = async (request, response) => {
     const { id } = request.params;
     const project = request.body;
+    // const image = request.file ? request.file.filename : null;
     try {
         const updateProject = await Project.findByIdAndUpdate(id, project, { new: true });
         response.status(201).json(updateProject);
