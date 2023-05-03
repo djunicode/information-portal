@@ -1,4 +1,3 @@
-const Project = require("../models/project.model");
 const {
     addProject,
     getProjects,
@@ -6,11 +5,11 @@ const {
     updateProject,
     deleteProject
 } = require('../controllers/projectCtrl');
+const {upload} = require('../middlewares/multer_single');
 
 // Initializing router
 const express = require('express');
 const router = express.Router();
-
 
 //Testing Route
 router.get('/', (req, res) => {
@@ -18,7 +17,7 @@ router.get('/', (req, res) => {
     res.send('Project Route');
 });
 
-router.post("/add", addProject);
+router.post('/add', upload.single('file'), addProject);
 router.get("/all", getProjects);
 router.get("/:id", getProject);
 router.put('/:id', updateProject);
