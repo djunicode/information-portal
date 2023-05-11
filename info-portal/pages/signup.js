@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useMutation } from "react-query";
 import Link from "next/link";
 import Image from "next/image";
 import background from "../public/images/bgs.png";
@@ -27,26 +28,58 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Signup = () => {
-  const [sapId, setSapId] = useState();
-  const [password, setPassword] = useState();
-  const [cpassword, setCPassword] = useState();
+  const [Sapid, setSapid] = useState("");
+  const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
-  const [branch, setBranch] = useState("");
+  const [Branch, setBranch] = useState("");
   const [email, setEmail] = useState("");
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
 
-  const handleSignup = () => {};
+  const { mutate, isLoading } = useMutation(
+    async (formData) => {
+      console.log(formData);
+      const res = await fetch("http://localhost:3001/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to sign up: ${res.statusText}`);
+      }
+      const data = await res.json();
+      console.log(data);
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log("Successfully signed up:", data);
+      },
+      onError: (error) => {
+        console.error("Failed to sign up:", error);
+      },
+    }
+  );
+
+  const handleSignup = (event) => {
+    event.preventDefault();
+    const name = `${fname} ${lname}`;
+    mutate({ Sapid, password,name, Branch, email });
+  };
 
   const passwordToggle = (e) => {
     e.preventDefault();
-    visible? setVisible(false):setVisible(true)
+    visible ? setVisible(false) : setVisible(true);
   };
 
   const passwordToggle2 = (e) => {
     e.preventDefault();
-    visible2? setVisible2(false):setVisible2(true)
+    visible2 ? setVisible2(false) : setVisible2(true);
   };
 
   return (
@@ -55,7 +88,11 @@ const Signup = () => {
         <Grid container spacing={0}>
           <Grid item xs={4} className="hidden tablet:inline">
             <Item>
-              <Image className="h-[100vh] overflow-y-hidden" src={background} alt="bg"></Image>
+              <Image
+                className="h-[100vh] overflow-y-hidden"
+                src={background}
+                alt="bg"
+              ></Image>
             </Item>
           </Grid>
 
@@ -102,10 +139,7 @@ const Signup = () => {
                                   noValidate
                                   autoComplete="off"
                                 >
-                                  <form
-                                    onSubmit={handleSignup}
-                                    className="ml-10"
-                                  >
+                                  <form className="ml-10" method="POST">
                                     <div className="flex flex-row">
                                       <div className="flex flex-col items-start">
                                         <label className=" font-medium font-ubuntu mt-8 ml-[-2]">
@@ -158,7 +192,7 @@ const Signup = () => {
                                           type="text"
                                           name="branch"
                                           aria-label="Branch"
-                                          value={branch}
+                                          value={Branch}
                                           onChange={(e) =>
                                             setBranch(e.target.value)
                                           }
@@ -177,9 +211,9 @@ const Signup = () => {
                                           type="text"
                                           name="sapid"
                                           aria-label="Sapid"
-                                          value={sapId}
+                                          value={Sapid}
                                           onChange={(e) =>
-                                            setSapId(e.target.value)
+                                            setSapid(e.target.value)
                                           }
                                         ></input>
                                       </div>
@@ -205,8 +239,11 @@ const Signup = () => {
                                           />
                                           <button
                                             className=""
-                                            onClick={(e)=>passwordToggle(e)}
-                                            style={{marginLeft: "-1rem", marginRight: "1rem"}}
+                                            onClick={(e) => passwordToggle(e)}
+                                            style={{
+                                              marginLeft: "-1rem",
+                                              marginRight: "1rem",
+                                            }}
                                           >
                                             {visible ? (
                                               <AiFillEyeInvisible />
@@ -239,8 +276,11 @@ const Signup = () => {
                                           />
                                           <button
                                             className=""
-                                            onClick={(e)=>passwordToggle2(e)}
-                                            style={{marginLeft: "-1rem", marginRight: "0.5rem"}}
+                                            onClick={(e) => passwordToggle2(e)}
+                                            style={{
+                                              marginLeft: "-1rem",
+                                              marginRight: "0.5rem",
+                                            }}
                                           >
                                             {visible2 ? (
                                               <AiFillEyeInvisible />
@@ -253,7 +293,6 @@ const Signup = () => {
                                     </div>
 
                                     <br />
-                                    
 
                                     <div className="flex flex-col items-start">
                                       <label className="font-medium font-ubuntu mt-8 ">
@@ -272,14 +311,18 @@ const Signup = () => {
                                       ></input>
                                     </div>
 
+                                    
                                     <br />
 
                                     <Button
                                       variant="contained"
                                       type="submit"
                                       className="mt-10 mb-8 flex text-[20px] ml-[95px]   items-center justify-center w-52 rounded-[10px]  font-semibold content-center hover:bg-lgreen capitalize text-md bg-lgreen font-ubuntu text-dgreen"
+                                      onClick={handleSignup}
                                     >
-                                      Create Account
+                                      {isLoading
+                                        ? "Loading..."
+                                        : "Create Account"}
                                     </Button>
                                   </form>
 
