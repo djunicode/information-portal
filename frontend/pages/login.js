@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import useLoginStore from "../authStore";
+import { useRouter } from "next/router";
 import Link from "next/link";
+import { useMutation } from "react-query";
 import background from "../public/images/bgs.png";
 import Image from "next/image";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
@@ -27,15 +30,61 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Login = () => {
-  const [sapId, setSapId] = useState();
+  const [Sapid, setSapid] = useLoginStore((state) => [
+    state.Sapid,
+    state.setSapid,
+  ]);
+  const [password, setPassword] = useLoginStore((state) => [
+    state.password,
+    state.setPassword,
+  ]);
+  const [visible, setVisible] = useLoginStore((state) => [
+    state.visible,
+    state.setVisible,
+  ]);
+  /*   const [Sapid, setSapid] = useState();
   const [password, setPassword] = useState();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false); */
 
-  const handleLogin = () => {};
+  const router = useRouter();
+
+  const { mutate, isLoading } = useMutation(
+    async (formData) => {
+      console.log(formData);
+      const res = await fetch("http://localhost:3001/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to login: ${res.statusText}`);
+      }
+      const data = await res.json();
+      console.log(data);
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        console.log("Successfully logged in:", data);
+        router.push("/home");
+      },
+      onError: (error) => {
+        console.error("Failed to login:", error);
+      },
+    }
+  );
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    mutate({ Sapid, password });
+  };
 
   const passwordToggle = (e) => {
     e.preventDefault();
-    visible? setVisible(false):setVisible(true)
+    visible ? setVisible(false) : setVisible(true);
   };
 
   return (
@@ -44,14 +93,22 @@ const Login = () => {
         <Grid container spacing={0}>
           <Grid item xs={4} className="hidden tablet:inline">
             <Item>
-              <Image className="h-[100vh] overflow-y-hidden" src={background} alt="bg"></Image>
+              <Image
+                className="h-[100vh] overflow-y-hidden"
+                src={background}
+                alt="bg"
+              ></Image>
             </Item>
           </Grid>
 
           <Grid item xs={8}>
             <Item>
               <CssBaseline>
-                <Container fixed maxWidth="xl " className="mt-20 overflow-y-hidden">
+                <Container
+                  fixed
+                  maxWidth="xl "
+                  className="mt-20 overflow-y-hidden"
+                >
                   <Box sx={{ bgcolor: "", height: "95vh" }}>
                     <Box sx={{ flexGrow: 1 }}>
                       <Grid container spacing={0}>
@@ -90,10 +147,7 @@ const Login = () => {
                                   noValidate
                                   autoComplete="off"
                                 >
-                                  <form
-                                    onSubmit={handleLogin}
-                                    className="flex flex-col justify-center items-center"
-                                  >
+                                  <form className="flex flex-col justify-center items-center">
                                     <div className="flex flex-col items-start">
                                       <label className="font-medium ml-[-1rem]  font-ubuntu mt-8 ">
                                         SapId
@@ -104,9 +158,9 @@ const Login = () => {
                                         placeholder=""
                                         name="sapid"
                                         aria-label="Sapid"
-                                        value={sapId}
+                                        value={Sapid}
                                         onChange={(e) =>
-                                          setSapId(e.target.value)
+                                          setSapid(e.target.value)
                                         }
                                       />
                                     </div>
@@ -131,7 +185,7 @@ const Login = () => {
 
                                         <button
                                           className="ml-[-2]"
-                                          onClick={(e)=>passwordToggle(e)}
+                                          onClick={(e) => passwordToggle(e)}
                                         >
                                           {visible ? (
                                             <AiFillEyeInvisible />
@@ -147,16 +201,17 @@ const Login = () => {
                                     <Button
                                       variant="contained"
                                       type="submit"
+                                      onClick={handleLogin}
                                       className="mt-10  flex text-[20px] ml-[12px]   items-center justify-center w-52 rounded-[10px]  font-semibold content-center hover:bg-lgreen capitalize text-md bg-lgreen font-ubuntu text-dgreen"
                                     >
-                                      Login
+                                      {isLoading ? "Loading..." : "Login"}
                                     </Button>
                                     <button className="font-thin underline mt-2 mb-8">
                                       Forgot Password?
                                     </button>
                                   </form>
 
-                                  <p className="ml-0 font-ubuntu text-base">
+                                  <div className="ml-0 font-ubuntu text-base">
                                     Don't have an account?{" "}
                                     <Link href="/signup">
                                       {" "}
@@ -164,7 +219,7 @@ const Login = () => {
                                         Sign up
                                       </button>
                                     </Link>
-                                  </p>
+                                  </div>
                                 </Box>
 
                                 <br />
