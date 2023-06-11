@@ -66,11 +66,12 @@ const navbar = (props) => {
               <span className='text-[15px] ml-4 '>Committee</span>
               </div>
 
+              <Link href='/faculty'>
               <div className='p-3 mt-3 flex items-center rounded-md px-10 cursor-pointer text-navgrey hover:bg-lgreen hover:text-dgreen  '>
-           
               <FaChalkboardTeacher/>
               <span className='text-[15px] ml-4 '>Faculty</span>
               </div>
+              </Link>
 
               <Link href='/research'>
               <div className='p-3 mt-3 flex items-center rounded-md px-10 cursor-pointer text-navgrey hover:bg-lgreen hover:text-dgreen  '>
@@ -86,18 +87,20 @@ const navbar = (props) => {
               </div>
 
              
-              
+              <Link href='/internships'>
               <div className='p-3 mt-3 flex items-center rounded-md px-10 cursor-pointer text-navgrey hover:bg-lgreen hover:text-dgreen  '>
               <MdNewspaper/>
               <span className='text-[15px] ml-4 '>Internships</span>
               </div>
+              </Link>
 
 
-              
+              <Link href='/achievements'>
               <div className='p-3 mt-3 flex items-center rounded-md px-10 cursor-pointer text-navgrey hover:bg-lgreen hover:text-dgreen  '>
               <GiTrophyCup/>
               <span className='text-[15px] ml-4 '>Achievements</span>
               </div>
+              </Link>
 
 
               
