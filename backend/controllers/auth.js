@@ -19,7 +19,7 @@ const createUser = async (req, res) => {
 // Login 
 const loginUser = async (req, res) => {
     try{
-		const user = await User.findByCredentials(req.body.username, req.body.password);
+		const user = await User.findByCredentials(req.body.Sapid, req.body.password);
 
 		if (!user) {
 			res.status(404).json({
