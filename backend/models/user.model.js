@@ -11,16 +11,6 @@ const userSchema = new mongoose.Schema(
         Branch: {
             type: String,     
         },
-
-        username: {
-            type: String,
-            required: true,
-            trim: true,
-            unique: true,
-            lowercase: true,
-            minlength: [2, 'username too short!'],
-            maxlength: [20, 'username too long!']
-        },
         email: {
             type: String,
             unique: true,
@@ -81,8 +71,8 @@ userSchema.methods.generateAuthToken = async function () {
     return token;
 } 
 
-userSchema.statics.findByCredentials = async function ( username, password ) {
-    const user = await this.findOne({ username });
+userSchema.statics.findByCredentials = async function ( Sapid, password ) {
+    const user = await this.findOne({ Sapid });
   
     if(!user) {
         throw new Error('Unable to login');
