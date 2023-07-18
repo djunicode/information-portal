@@ -61,10 +61,11 @@ const navbar = (props) => {
               <span className='text-[15px] ml-4 '>CGPA/Grades</span>
               </div></Link>
 
+              <Link href='/committee'>
               <div className='p-3 mt-3 flex items-center rounded-md px-10 cursor-pointer text-navgrey hover:bg-lgreen hover:text-dgreen  '>
               <IoIosPeople/>
               <span className='text-[15px] ml-4 '>Committee</span>
-              </div>
+              </div></Link>
 
               <Link href='/faculty'>
               <div className='p-3 mt-3 flex items-center rounded-md px-10 cursor-pointer text-navgrey hover:bg-lgreen hover:text-dgreen  '>
